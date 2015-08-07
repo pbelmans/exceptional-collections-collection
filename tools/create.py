@@ -6,7 +6,7 @@ import sqlite3
 config = ConfigParser.ConfigParser()
 config.read("../config.ini")
 
-# the path should be interpret relative to the root directory
+# the path should be interpreted relative to the root directory
 path = "../" + config.get("database", "path")
 # override this if you want the file to be created elsewhere
 
@@ -17,6 +17,7 @@ def createTable(filename):
   cursor.executescript(query)
 
 tables = ["articles.sql",
+          "arxiv.sql",
           "authors.sql",
           "keywords.sql",
           "types.sql"
