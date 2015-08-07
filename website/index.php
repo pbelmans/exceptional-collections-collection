@@ -43,6 +43,7 @@ try {
   $main = $page->getMain();
 }
 catch(PDOException $e) {
+  print_r($e);
   $page = new ErrorPage($e);
 
   // get the parts here so that exceptions are thrown
@@ -60,6 +61,7 @@ catch(PDOException $e) {
 
 <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css" rel="stylesheet">
 <link href="css/main.css" type="text/css" rel="stylesheet">
+<link href="css/table.css" type="text/css" rel="stylesheet">
 
 </head>
 

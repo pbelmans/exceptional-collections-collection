@@ -1,0 +1,26 @@
+table td {
+  padding: 1px;
+}
+
+table th#authors {
+
+}
+
+table th#title {
+}
+
+table th#links {
+  width: 64px;
+}
+
+table td.links span {
+  display: block;
+  width: 20px;
+  float: left;
+}
+
+table td.links img {
+}
+
+table th#year {
+}

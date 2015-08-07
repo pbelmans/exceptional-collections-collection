@@ -22,6 +22,10 @@ class Article {
   public $year;
   public $authors = array();
 
+  public $arXiv;
+  public $MSC;
+  public $zbMath;
+
   public function __construct($id, $title, $year) {
     $this->id = $id;
     $this->title = $title;
@@ -45,7 +49,7 @@ function getArticles() {
       $article = new Article($articleRow["id"], $articleRow["title"], $articleRow["year"]);
       array_push($articles, $article);
 
-      // link authors to articles
+      // associate authors to articles
       $sql = $database->prepare("SELECT authors.id, authors.firstname, authors.lastname FROM authors, articles, authorship WHERE articles.id = authorship.article AND authors.id = authorship.author AND articles.id = :article");
       $sql->bindParam(":article", $article->id);
 
@@ -54,6 +58,18 @@ function getArticles() {
 
         foreach ($authorRows as $authorRow) {
           array_push($article->authors, new Author($authorRow["id"], $authorRow["firstname"], $authorRow["lastname"]));
+        }
+      }
+
+      // associate arXiv information to articles
+      $sql = $database->prepare("SELECT arxiv.identifier, arxiv.category FROM arxiv, articles WHERE articles.id = arxiv.article AND articles.id = :article");
+      $sql->bindParam(":article", $article->id);
+
+      if ($sql->execute()) {
+        $arXivRows = $sql->fetchAll(); // TODO this returns 0 or 1, improve this...
+
+        foreach ($arXivRows as $arXivRow) {
+          $article->arXiv = $arXivRow;
         }
       }
     }
@@ -75,6 +91,16 @@ function printAuthors($authors) {
   return $output;
 }
 
+function printLinks($links) {
+  $output = "";
+
+  $output .= "<span><a href='#'><img src='images/arxiv.ico' height='16'></a></span>";
+  $output .= "<span>&nbsp;</span>";
+  $output .= "<span><a href='#'><img src='images/zbmath.ico' height='16'></a></span>";
+
+  return $output;
+}
+
 function printTable($articles) {
   $output = "";
 
@@ -90,7 +116,7 @@ function printTable($articles) {
     $output .= "<tr>";
     $output .= "<td>" . printAuthors($article->authors);
     $output .= "<td>" . $article->title;
-    $output .= "<td>";
+    $output .= "<td class='links'>" . printLinks($article);
     $output .= "<td>" . $article->year;
     $output .= "</tr>";
   }
