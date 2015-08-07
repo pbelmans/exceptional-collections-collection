@@ -68,10 +68,10 @@ catch(PDOException $e) {
 
 <div id="header">
   <ul id="menu">
-    <li><a class="scroll" href="">home</a>
-    <li><a class="scroll" href="/authors">home</a>
-    <li><a class="scroll" href="/about">about</a>
-    <li><a class="scroll" href="/contribute">contribute</a>
+    <li><a href="">home</a>
+    <li><a href="/authors">home</a>
+    <li><a href="/about">about</a>
+    <li><a href="/contribute">contribute</a>
   </ul>
 
   <h1><a href="">the exceptional collection</a></h1>
