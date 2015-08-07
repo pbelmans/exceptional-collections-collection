@@ -19,6 +19,7 @@ def createTable(filename):
 tables = ["articles.sql",
           "arxiv.sql",
           "authors.sql",
+          "authorship.sql",
           "keywords.sql",
           "types.sql"
 ]

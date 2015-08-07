@@ -91,6 +91,15 @@ def createAuthor(first, last):
 
   return cursor.lastrowid
 
+# link an article and an author
+def addAuthorship(article, author):
+  try:
+    query = "INSERT INTO authorship (article, author) VALUES (?, ?)"
+    cursor.execute(query, (article, author))
+
+  except sqlite3.Error, e:
+    print "An error occurred:", e.args[0]
+
 # set the identifier and category for an article
 def setArXivIdentifier(article, identifier, category):
   assert isValidIdentifier("arXiv", identifier)
@@ -147,9 +156,11 @@ def addArticle(title):
   return (True, article)
 
 # add the authors and link the article
-def addAuthors(names):
+def addAuthors(article, names):
   for (first, last) in names:
     (added, author) = addAuthor(first, last)
+
+    addAuthorship(article, author)
 
 # try adding an author, returns (added, author)
 def addAuthor(first, last):
@@ -158,7 +169,7 @@ def addAuthor(first, last):
   # if there are collisions we ask the user whether the author already exists
   if len(similar) > 0:
     # give them the options
-    print "Found similar authors:"
+    print "Found authors similar to {0} {1}:".format(first, last)
     for (author, first, last) in similar:
       print " {0}) {1} {2}".format(author, first, last)
 
@@ -208,8 +219,8 @@ def arXivImporter(identifier):
   # try adding the article
   (added, article) = addArticle(title)
 
-  # if the article was added we try adding the authors
-  if added: addAuthors(authors)
+  # if the article was added we try adding the authors to the database and linking the article to them
+  if added: addAuthors(article, authors)
 
   # if the article was added we update the arXiv identifier accordingly
   if added:
