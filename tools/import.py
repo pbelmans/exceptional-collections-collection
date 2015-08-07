@@ -50,8 +50,9 @@ def getSimilarTitles(new):
 
 # look for similar names
 def getSimilarNames(new):
+  # produce reasonable sounding alternatives for a name
   def produceNames(first, last):
-    return ["{0} {1}".format(first, last), "{0} {1}".format(last, first), last]
+    return [unicode("{0} {1}").format(first, last), unicode("{0} {1}").format(last, first), last]
 
   names = []
 
@@ -64,13 +65,26 @@ def getSimilarNames(new):
   except sqlite3.Error, e:
     print "An error occurred:", e.args[0]
 
-  return [(author, first, last) for (article, first, last) in names if any([Levenshtein.ratio(new, name) > 0.9 for name in produceNames(first, last)])]
+  candidates = sum([produceNames(first, last) for (author, first, last) in names], [])
+
+  return [(author, first, last) for (author, first, last) in names if any([Levenshtein.ratio(unicode(new), name) > 0.7 for name in produceNames(first, last)])]
 
 # creates an article in the database
 def createArticle(title):
   try:
     query = "INSERT INTO articles (title) VALUES (?)"
     cursor.execute(query, (title,))
+
+  except sqlite3.Error, e:
+    print "An error occurred:", e.args[0]
+
+  return cursor.lastrowid
+
+# creates an author in the database
+def createAuthor(first, last):
+  try:
+    query = "INSERT INTO authors (firstname, lastname) VALUES (?, ?)"
+    cursor.execute(query, (first, last))
 
   except sqlite3.Error, e:
     print "An error occurred:", e.args[0]
@@ -94,17 +108,18 @@ def setArXivIdentifier(article, identifier, category):
 the actual magic
 """
 
-# try adding an article
-# returns (added, article)
+# try adding an article, returns (added, article)
 def addArticle(title):
   similar = getSimilarTitles(title)
 
   # if there are collisions we ask the user whether the article already exists
   if len(similar) > 0:
-    print "Found similar items:"
+    # give them the options
+    print "Found similar articles:"
     for (article, title) in similar:
       print " {0}) {1}".format(article, title)
 
+    # try to resolve the collision
     while True:
       answer = raw_input("Is the article '{0}' any of the above? (Y/N): ".format(title))
 
@@ -115,8 +130,6 @@ def addArticle(title):
         # for later use we return the id of the already existing article
         while True:
           answer = raw_input("Which of the articles is it? ")
-
-          print [article for (article, title) in similar]
 
           if answer in [str(article) for (article, title) in similar]:
             return (False, answer)
@@ -133,8 +146,49 @@ def addArticle(title):
 
   return (True, article)
 
-def addAuthor(author):
-  return True
+# add the authors and link the article
+def addAuthors(names):
+  for (first, last) in names:
+    (added, author) = addAuthor(first, last)
+
+# try adding an author, returns (added, author)
+def addAuthor(first, last):
+  similar = getSimilarNames(unicode("{0} {1}").format(first, last))
+
+  # if there are collisions we ask the user whether the author already exists
+  if len(similar) > 0:
+    # give them the options
+    print "Found similar authors:"
+    for (author, first, last) in similar:
+      print " {0}) {1} {2}".format(author, first, last)
+
+    # try to resolve the collision
+    while True:
+      answer = raw_input(unicode("Is the author '{0} {1}' any of the above? (Y/N): ").format(first, last))
+
+      # if yes then we ask for the collision
+      if answer == "Y":
+        if verbose: print unicode("Not adding '{0} {1}'\n").format(first, last)
+
+        # for later use we return the id of the already existing author
+        while True:
+          answer = raw_input("Which of the authors is it? ")
+
+          if answer in [str(author) for (author, first, last) in similar]:
+            return (False, answer)
+
+        return 0
+
+      # if no then we add the author
+      if answer == "N": break
+
+  # there are no collisions so we can add the article
+  author = createAuthor(first, last)
+
+  if verbose: unicode("Added author {0} with name '{1} {2}'").format(author, first, last)
+
+  return (True, author)
+
 
 def arXivImporter(identifier):
   assert isValidIdentifier("arXiv", identifier)
@@ -148,19 +202,17 @@ def arXivImporter(identifier):
 
   # collect the data from the feed
   title = entry["title"]
-  authors = [author["name"] for author in entry["authors"]]
   category = entry["tags"][0]["term"]
+  authors = [author["name"].split(" ", 1) for author in entry["authors"]]
 
   # try adding the article
   (added, article) = addArticle(title)
 
-  # if the article was added we try adding the authors and the arXiv identifier
-  if added:
-    # try adding the authors of the article
-    for name in authors:
-      author = addAuthor(name)
-      # TODO link the article to the author
+  # if the article was added we try adding the authors
+  if added: addAuthors(authors)
 
+  # if the article was added we update the arXiv identifier accordingly
+  if added:
     # associate arXiv identifier and category to it
     setArXivIdentifier(article, identifier, category)
     if verbose: print "Associated arXiv identifier {0} and category {1} to article {2}".format(identifier, category, article)
