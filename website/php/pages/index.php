@@ -94,9 +94,20 @@ function printAuthors($authors) {
 function printLinks($links) {
   $output = "";
 
-  $output .= "<span><a href='#'><img src='images/arxiv.ico' height='16'></a></span>";
-  $output .= "<span>&nbsp;</span>";
-  $output .= "<span><a href='#'><img src='images/zbmath.ico' height='16'></a></span>";
+  if (!empty($links["arXiv"]))
+    $output .= "<span><a href='http://arxiv.org/abs/" . $links["arXiv"] . "'><img src='images/arxiv.ico' height='16'></a></span>";
+  else
+    $output .= "<span>&nbsp;</span>";
+
+  if (!empty($links["MSC"]))
+    $output .= "<span><a href='http://www.ams.org/mathscinet-getitem?mr=" . $links["MSC"] . "'><img src='images/msc.ico' height='16'></a></span>";
+  else
+    $output .= "<span>&nbsp;</span>";
+
+  if (!empty($links["zbMath"]))
+    $output .= "<span><a href='https://zbmath.org/?q=an:" . $links["zbMath"] . "'><img src='images/zbmath.ico' height='16'></a></span>";
+  else
+    $output .= "<span>&nbsp;</span>";
 
   return $output;
 }
@@ -113,10 +124,12 @@ function printTable($articles) {
   $output .= "</tr>";
 
   foreach ($articles as $article) {
+    $links = array("arXiv" => $article->arXiv["identifier"], "MSC" => $article->MSC["identifier"], "zbMath" => $article->zbMath["identifier"]);
+
     $output .= "<tr>";
     $output .= "<td>" . printAuthors($article->authors);
     $output .= "<td>" . $article->title;
-    $output .= "<td class='links'>" . printLinks($article);
+    $output .= "<td class='links'>" . printLinks($links);
     $output .= "<td>" . $article->year;
     $output .= "</tr>";
   }
