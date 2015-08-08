@@ -26,9 +26,9 @@ class Article {
   public $year;
   public $authors = array();
 
-  public $arXiv;
-  public $MSC;
-  public $zbMath;
+  public $arXiv = array("identifier" => "", "category" => "");
+  public $MSC = array ("identifer" => "");
+  public $zbMath = array("identifier" => "");
 
   public function __construct($id, $title, $year) {
     $this->id = $id;

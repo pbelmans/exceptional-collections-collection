@@ -19,12 +19,10 @@ function printTable($articles) {
 
   $output .= "<tbody>";
   foreach ($articles as $article) {
-    $links = array("arXiv" => $article->arXiv["identifier"], "MSC" => $article->MSC["identifier"], "zbMath" => $article->zbMath["identifier"]);
-
     $output .= "<tr>";
     $output .= "<td>" . printAuthors($article->authors);
     $output .= "<td>" . $article->title;
-    $output .= "<td class='links'>" . printLinks($links);
+    $output .= "<td class='links'>" . printLinks($article);
     $output .= "<td>" . printYear($article);
     $output .= "</tr>";
   }
@@ -59,21 +57,21 @@ function printAuthor($author) {
 }
 
 // pretty print links to arXiv, MSC and zbMath in the table
-function printLinks($links) {
+function printLinks($article) {
   $output = "";
 
-  if (!empty($links["arXiv"]))
-    $output .= "<span><a href='http://arxiv.org/abs/" . $links["arXiv"] . "'><img src='" . href("images/arxiv.ico") . "' height='16' alt='arXiv " . $links["arXiv"] . "'></a></span>";
+  if (!empty($article->arXiv["identifier"]))
+    $output .= "<span><a href='http://arxiv.org/abs/" . $article->arXiv["identifier"] . "'><img src='" . href("images/arxiv.ico") . "' height='16' alt='arXiv " . $article->arXiv["identifier"] . "'></a></span>";
   else
     $output .= "<span>&nbsp;</span>";
 
-  if (!empty($links["MSC"]))
-    $output .= "<span><a href='http://www.ams.org/mathscinet-getitem?mr=" . $links["MSC"] . "'><img src='" . href("images/msc.ico") . "' height='16' alt='MR" . $links["MSC"] . "'></a></span>";
+  if (!empty($article->MSC["identifier"]))
+    $output .= "<span><a href='http://www.ams.org/mathscinet-getitem?mr=" . $article->MSC["identifier"] . "'><img src='" . href("images/msc.ico") . "' height='16' alt='MR" . $article->MSC["identifier"] . "'></a></span>";
   else
     $output .= "<span>&nbsp;</span>";
 
-  if (!empty($links["zbMath"]))
-    $output .= "<span><a href='https://zbmath.org/?q=an:" . $links["zbMath"] . "'><img src='" . href("images/zbmath.ico") . "' height='16' alt='Zbl" . $links["zbMath"] . "'></a></span>";
+  if (!empty($article->zbMath["zbMath"]))
+    $output .= "<span><a href='https://zbmath.org/?q=an:" . $article->zbMath["zbMath"] . "'><img src='" . href("images/zbmath.ico") . "' height='16' alt='Zbl" . $article->zbMath["zbMath"] . "'></a></span>";
   else
     $output .= "<span>&nbsp;</span>";
 
