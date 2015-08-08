@@ -4,5 +4,7 @@ CREATE TABLE "articles" (
   "year" INTEGER,
   -- arXiv
   "arxiv" INTEGER UNIQUE,
-  "arxivcategory" VARCHAR
+  "arxivcategory" VARCHAR,
+  -- msc
+  "msc" VARCHAR UNIQUE
 );
