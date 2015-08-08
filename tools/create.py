@@ -16,7 +16,8 @@ def createTable(filename):
   cursor = connection.cursor()
   cursor.executescript(query)
 
-tables = ["articles.sql",
+tables = ["articlekeywords.sql",
+          "articles.sql",
           "authors.sql",
           "authorship.sql",
           "keywords.sql",

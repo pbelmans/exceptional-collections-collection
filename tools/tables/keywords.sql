@@ -1,4 +1,6 @@
 CREATE TABLE "keywords" (
-  "id" INTEGER,
-  "keyword" INTEGER
+  "id" INTEGER PRIMARY KEY,
+  "keyword" VARCHAR,
+  "slug" VARCHAR,
+  "description" VARCHAR
 );
