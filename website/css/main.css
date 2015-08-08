@@ -58,6 +58,6 @@ div#text {
   position: relative;
   top: 8em;
   min-width: 80%;
-  margin: 2em;
+  margin: 1em;
   z-index: 1;
 }
