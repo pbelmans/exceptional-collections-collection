@@ -1,41 +1,6 @@
 <?php
 
-/**
- * Data container class for authors in articles
- */
-class Author {
-  public $id;
-
-  public $first;
-  public $last;
-
-  public function __construct($id, $first, $last) {
-    $this->id = $id;
-    $this->first = $first;
-    $this->last = $last;
-  }
-}
-
-/**
- * Data container class for articles
- */
-class Article {
-  public $id;
-
-  public $title;
-  public $year;
-  public $authors = array();
-
-  public $arXiv;
-  public $MSC;
-  public $zbMath;
-
-  public function __construct($id, $title, $year) {
-    $this->id = $id;
-    $this->title = $title;
-    $this->year = $year;
-  }
-}
+require_once("articles.php");
 
 // main function
 function printTable($articles) {
