@@ -62,6 +62,7 @@ function getArticles() {
       }
 
       // associate arXiv information to articles
+      // TODO this should be in the first query selecting all articles via some JOIN magic?
       $sql = $database->prepare("SELECT arxiv.identifier, arxiv.category FROM arxiv, articles WHERE articles.id = arxiv.article AND articles.id = :article");
       $sql->bindParam(":article", $article->id);
 
@@ -112,6 +113,47 @@ function printLinks($links) {
   return $output;
 }
 
+function arXivIdentifierToYear($identifier) {
+  // based on http://arxiv.org/help/arxiv_identifier and http://arxiv.org/help/arxiv_identifier_for_services 
+
+  // check for old resp. new scheme
+  if (strpos($identifier, "/") !== false) {
+    // old scheme
+    $parts = explode("/", $identifier);
+
+    if ($parts[1][0] == "0")
+      return "20" . substr($parts[1], 0, 2);
+    else
+      return "19" . substr($parts[1], 0, 2);
+  }
+  else {
+    // new scheme
+    $parts = explode(".", $identifier);
+
+    return "20" . substr($parts[0], 0, 2);
+  }
+}
+
+function printYear($article) {
+  $output = "";
+
+  // if the actual year is set we use this
+  if (!empty($article->year)) {
+    $output .= $article->year;
+
+    // if there is moreover a preprint we also print its year of publication
+    if (!empty($article->arXiv)) {
+      $output .= " (" . $article->arXiv["identifier"] . ")";
+    }
+  }
+  // if there is no year but there is an arXiv identifier we'll use this
+  elseif (!empty($article->arXiv)) {
+    $output .= " (" . arXivIdentifierToYear($article->arXiv["identifier"]) . ")";
+  }
+
+  return $output;
+}
+
 function printTable($articles) {
   $output = "";
 
@@ -134,7 +176,7 @@ function printTable($articles) {
     $output .= "<td>" . printAuthors($article->authors);
     $output .= "<td>" . $article->title;
     $output .= "<td class='links'>" . printLinks($links);
-    $output .= "<td>" . $article->year;
+    $output .= "<td>" . printYear($article);
     $output .= "</tr>";
   }
   $output .= "</tbody>";
