@@ -125,6 +125,18 @@ def setMSCIdentifier(article, identifier):
   except sqlite3.Error, e:
     print "An error occurred:", e.args[0]
 
+# set the year for an article
+def setYear(article, year):
+  assert articleExists(article)
+
+  try:
+    query = "UPDATE articles SET year = ? WHERE id = ?"
+    cursor.execute(query, (year, article))
+
+  except sqlite3.Error, e:
+    print "An error occurred:", e.args[0]
+
+
 
 """
 the actual magic
@@ -346,11 +358,12 @@ def MRImporter(identifier):
   authors = entry["author"]
   authors = authors.split(" and ")
   authors = [(name[1], name[0]) for name in [name.split(",") for name in authors]]
-  print authors
   year = entry["year"]
 
   # add the article and authors if necessary
   (added, article) = importer(title, authors)
+
+  setYear(article, year)
 
   # if the article was added we update the MSC identifier accordingly
   if added:
@@ -378,6 +391,7 @@ arXivImporter("math/0206295")
 arXivImporter("alg-geom/9506012")
 
 MRImporter("MR1996800")
+arXivImporter("math/0204218")
 
 
 
