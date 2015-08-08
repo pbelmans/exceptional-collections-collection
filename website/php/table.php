@@ -64,22 +64,34 @@ function printAuthor($author) {
   return $output;
 }
 
+function arXivLink($arxiv) {
+  return "<a href='http://arxiv.org/abs/" . $arxiv["identifier"] . "'><img src='" . href("images/arxiv.ico") . "' height='16' alt='arXiv " . $arxiv["identifier"] . "'></a>";
+}
+
+function MSCLink($msc) {
+  return "<a href='http://www.ams.org/mathscinet-getitem?mr=" . $msc["identifier"] . "'><img src='" . href("images/msc.ico") . "' height='16' alt='MR" . $msc["identifier"] . "'></a>";
+}
+
+function zbMathLink($zbmath) {
+  return "<a href='https://zbmath.org/?q=an:" . $zbmath["zbMath"] . "'><img src='" . href("images/zbmath.ico") . "' height='16' alt='Zbl" . $zbmath["zbMath"] . "'></a>";
+}
+
 // pretty print links to arXiv, MSC and zbMath in the table
 function printLinks($article) {
   $output = "";
 
   if (!empty($article->arXiv["identifier"]))
-    $output .= "<span><a href='http://arxiv.org/abs/" . $article->arXiv["identifier"] . "'><img src='" . href("images/arxiv.ico") . "' height='16' alt='arXiv " . $article->arXiv["identifier"] . "'></a></span>";
+    $output .= "<span>" . arXivLink($article->arXiv) . "</span>";
   else
     $output .= "<span>&nbsp;</span>";
 
   if (!empty($article->MSC["identifier"]))
-    $output .= "<span><a href='http://www.ams.org/mathscinet-getitem?mr=" . $article->MSC["identifier"] . "'><img src='" . href("images/msc.ico") . "' height='16' alt='MR" . $article->MSC["identifier"] . "'></a></span>";
+    $output .= "<span>" . MSCLink($article->MSC) . "</span>";
   else
     $output .= "<span>&nbsp;</span>";
 
   if (!empty($article->zbMath["zbMath"]))
-    $output .= "<span><a href='https://zbmath.org/?q=an:" . $article->zbMath["zbMath"] . "'><img src='" . href("images/zbmath.ico") . "' height='16' alt='Zbl" . $article->zbMath["zbMath"] . "'></a></span>";
+    $output .= "<span>" . zbMathLink($article->zbMath) . "</span>";
   else
     $output .= "<span>&nbsp;</span>";
 
