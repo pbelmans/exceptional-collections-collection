@@ -5,6 +5,8 @@ error_reporting(E_ALL);
 
 $config = parse_ini_file("../config.ini");
 
+require_once("php/general.php");
+
 require_once("php/pages/index.php");
 
 // we try to construct the page object

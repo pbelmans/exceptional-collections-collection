@@ -83,11 +83,20 @@ function printAuthors($authors) {
   $output = "";
 
   for ($i = 0; $i < count($authors); $i++) {
-    $output .= $authors[$i]->first . " " . $authors[$i]->last;
+    $output .= printAuthor($authors[$i]);
 
     if ($i != count($authors) - 1)
       $output .= ", ";
   }
+
+  return $output;
+}
+
+function printAuthor($author) {
+  $output = "";
+
+  // not sure whether this is the best format
+  $output .= $author->first . " <a href='" . href("authors/" . $author->id) . "'>" . $author->last . "</a>";
 
   return $output;
 }
