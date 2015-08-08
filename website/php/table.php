@@ -36,17 +36,14 @@ function printTable($articles) {
 }
 
 
-
 // pretty print authors in the table
 function printAuthors($authors) {
-  $output = "";
+  $output = "<ol class='authors'>";
 
-  for ($i = 0; $i < count($authors); $i++) {
-    $output .= printAuthor($authors[$i]);
+  foreach ($authors as $author)
+    $output .= printAuthor($author);
 
-    if ($i != count($authors) - 1)
-      $output .= ", ";
-  }
+  $output .= "</ol>";
 
   return $output;
 }
@@ -56,7 +53,7 @@ function printAuthor($author) {
   $output = "";
 
   // not sure whether this is the best format
-  $output .= $author->first . " <a href='" . href("authors/" . $author->id) . "'>" . $author->last . "</a>";
+  $output .= "<li>" . $author->first . " <a href='" . href("authors/" . $author->id) . "'>" . $author->last . "</a>";
 
   return $output;
 }

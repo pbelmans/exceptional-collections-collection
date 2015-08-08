@@ -7,6 +7,7 @@ $config = parse_ini_file("../config.ini");
 
 require_once("php/general.php");
 
+require_once("php/pages/article.php");
 require_once("php/pages/author.php");
 require_once("php/pages/index.php");
 
@@ -35,9 +36,20 @@ try {
       $page = new IndexPage($database);
       break;
 
+    case "articles":
+      if (empty($_GET["id"])) {
+        $page = new ErrorPage("No article id supplied"); // TODO improve: maybe just display all articles sorted by id?
+        break;
+      }
+
+      // TODO check existence
+
+      $page = new ArticlePage($database, $_GET["id"]);
+      break;
+
     case "author":
       if (empty($_GET["id"])) {
-        $page = new ErrorPage("No author id supplied"); // TODO improve
+        $page = new ErrorPage("No author id supplied"); // TODO improve: maybe just display all articles sorted by author?
         break;
       }
 

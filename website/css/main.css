@@ -61,3 +61,21 @@ div#text {
   margin: 1em;
   z-index: 1;
 }
+
+ol.authors {
+  padding: 0;
+  display: inline;
+  list-style-type: none;
+}
+
+ol.authors li {
+  display: inline;
+}
+
+ol.authors li:after {
+  content: ", ";
+}
+
+ol.authors li:last-child:after {
+  content: "";
+}
