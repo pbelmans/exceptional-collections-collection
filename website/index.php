@@ -59,6 +59,24 @@ catch(PDOException $e) {
 
 <title>the exceptional collection<?php print $title; ?></title>
 
+<script type='text/x-mathjax-config'>
+	MathJax.Hub.Config({
+		extensions: ['tex2jax.js'],
+		jax: ['input/TeX','output/HTML-CSS'],
+		TeX: {
+			extensions: ['AMSmath.js', 'AMSsymbols.js', 'color.js'],
+			TagSide: 'left'
+		},
+		tex2jax: {
+			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+			displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+			processEscapes: true
+		},
+		'HTML-CSS': { scale: 85 }
+	});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+
 <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css" rel="stylesheet">
 <link href="css/main.css" type="text/css" rel="stylesheet">
 <link href="css/table.css" type="text/css" rel="stylesheet">
