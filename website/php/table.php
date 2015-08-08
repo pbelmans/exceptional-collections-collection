@@ -21,7 +21,7 @@ function printTable($articles) {
   foreach ($articles as $article) {
     $output .= "<tr>";
     $output .= "<td>" . printAuthors($article->authors);
-    $output .= "<td>" . $article->title;
+    $output .= "<td>" . printArticle($article);
     $output .= "<td class='links'>" . printLinks($article);
     $output .= "<td>" . printYear($article);
     $output .= "</tr>";
@@ -33,6 +33,14 @@ function printTable($articles) {
   return $output;
 }
 
+// pretty print the article in the table
+function printArticle($article) {
+  $output = "";
+
+  $output .= "<a href='" . href("articles/" . $article->id) . "'>" . $article->title . "</a>";
+
+  return $output;
+}
 
 // pretty print authors in the table
 function printAuthors($authors) {
