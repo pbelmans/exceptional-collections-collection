@@ -92,13 +92,13 @@ function printYear($article) {
     $output .= $article->year;
 
     // if there is moreover a preprint we also print its year of publication
-    if (!empty($article->arXiv)) {
-      $output .= " (" . $article->arXiv["identifier"] . ")";
+    if (!empty($article->arXiv["identifier"])) {
+      $output .= " (<span class='arxiv-year'>" . arXivIdentifierToYear($article->arXiv["identifier"]) . "</span>)";
     }
   }
   // if there is no year but there is an arXiv identifier we'll use this
-  elseif (!empty($article->arXiv)) {
-    $output .= " (" . arXivIdentifierToYear($article->arXiv["identifier"]) . ")";
+  elseif (!empty($article->arXiv["identifier"])) {
+    $output .= "&mdash; (<span class='arxiv-year'>" . arXivIdentifierToYear($article->arXiv["identifier"]) . "</span>)";
   }
 
   return $output;
