@@ -38,7 +38,7 @@ class Article {
 }
 
 // describes all the fields that one needs to select
-$articleFields = "articles.id, articles.title, articles.year, articles.arxiv, articles.arxivcategory";
+$articleFields = "articles.id, articles.title, articles.year, articles.arxiv, articles.arxivcategory, articles.msc";
 
 // global variable
 $authorArticleTable;
@@ -90,7 +90,10 @@ function getArticles($sql) {
     foreach ($rows as $row) {
       // create new article object
       $article = new Article($row["id"], $row["title"], $row["year"]);
+
       $article->arXiv = array("identifier" => $row["arxiv"], "category" => $row["arxivcategory"]);
+      $article->MSC = array("identifier" => $row["msc"]);
+
       $article = decorateWithAuthor($article);
 
       array_push($articles, $article);
