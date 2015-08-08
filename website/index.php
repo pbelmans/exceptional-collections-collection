@@ -7,6 +7,7 @@ $config = parse_ini_file("../config.ini");
 
 require_once("php/general.php");
 
+require_once("php/pages/author.php");
 require_once("php/pages/index.php");
 
 // we try to construct the page object
@@ -35,6 +36,14 @@ try {
       break;
 
     case "author":
+      if (empty($_GET["id"])) {
+        $page = new ErrorPage("No author id supplied"); // TODO improve
+        break;
+      }
+
+      // TODO check existence
+
+      $page = new AuthorPage($database, $_GET["id"]);
       break;
 
     // TODO etc. etc.
@@ -80,8 +89,8 @@ catch(PDOException $e) {
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 
 <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css" rel="stylesheet">
-<link href="css/main.css" type="text/css" rel="stylesheet">
-<link href="css/table.css" type="text/css" rel="stylesheet">
+<link href="<?php print href("css/main.css"); ?>" type="text/css" rel="stylesheet">
+<link href="<?php print href("css/table.css"); ?>" type="text/css" rel="stylesheet">
 
 </head>
 
@@ -90,10 +99,10 @@ catch(PDOException $e) {
 
 <div id="header">
   <ul id="menu">
-    <li><a href="">home</a>
-    <li><a href="/authors">home</a>
-    <li><a href="/about">about</a>
-    <li><a href="/contribute">contribute</a>
+    <li><a href="<?php print href(""); ?>">home</a>
+    <li><a href="<?php print href("authors"); ?>">authors</a>
+    <li><a href="<?php print href("about"); ?>">about</a>
+    <li><a href="<?php print href("contribute"); ?>">contribute</a>
   </ul>
 
   <h1><a href="">the exceptional collection</a></h1>
