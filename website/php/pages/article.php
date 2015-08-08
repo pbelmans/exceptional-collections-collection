@@ -64,6 +64,8 @@ function printLinksPanel($article) {
     $output .= MSCLinkFull($article->MSC);
   if (!empty($article->zbMath["identifier"]))
     $output .= zbMathLinkFull($article->zbMath);
+  if (!empty($article->arXiv["identifier"]) and !empty($article->MSC["identifier"]) and !empty($article->zbMath["identifier"]))
+    $output .= "<li class='list-group-item'><em>No links known.</em>";
   $output .= "</div>";
   $output .= "</div>";
   $output .= "</div>";
