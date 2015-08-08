@@ -5,8 +5,9 @@ require_once("php/table.php");
 
 class IndexPage extends page {
   public function getMain() {
-    $sql = $this->db->prepare("SELECT articles.id, articles.title, articles.year FROM articles");
+    global $articleFields;
 
+    $sql = $this->db->prepare("SELECT " . $articleFields . " FROM articles");
     $articles = getArticles($sql);
 
     return printTable($articles);

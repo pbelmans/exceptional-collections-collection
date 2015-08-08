@@ -37,6 +37,9 @@ class Article {
   }
 }
 
+// describes all the fields that one needs to select
+$articleFields = "articles.id, articles.title, articles.year, articles.arxiv, articles.arxivcategory";
+
 // global variable
 $authorArticleTable;
 
@@ -82,27 +85,16 @@ function getArticles($sql) {
 
   // prepare the articles
   if ($sql->execute()) {
-    $articleRows = $sql->fetchAll();
+    $rows = $sql->fetchAll();
 
-    foreach ($articleRows as $articleRow) {
+    foreach ($rows as $row) {
+      print_r($row);
       // create new article object
-      $article = new Article($articleRow["id"], $articleRow["title"], $articleRow["year"]);
+      $article = new Article($row["id"], $row["title"], $row["year"]);
+      $article->arXiv = array("identifier" => $row["arxiv"], "category" => $row["arxivcategory"]);
       $article = decorateWithAuthor($article);
 
       array_push($articles, $article);
-
-      // associate arXiv information to articles
-      // TODO this should be in the first query selecting all articles via some JOIN magic?
-      $sql = $database->prepare("SELECT arxiv.identifier, arxiv.category FROM arxiv, articles WHERE articles.id = arxiv.article AND articles.id = :article");
-      $sql->bindParam(":article", $article->id);
-
-      if ($sql->execute()) {
-        $arXivRows = $sql->fetchAll(); // TODO this returns 0 or 1, improve this...
-
-        foreach ($arXivRows as $arXivRow) {
-          $article->arXiv = $arXivRow;
-        }
-      }
     }
   }
 

@@ -17,7 +17,6 @@ def createTable(filename):
   cursor.executescript(query)
 
 tables = ["articles.sql",
-          "arxiv.sql",
           "authors.sql",
           "authorship.sql",
           "keywords.sql",

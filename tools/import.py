@@ -106,8 +106,8 @@ def setArXivIdentifier(article, identifier, category):
   assert articleExists(article)
 
   try:
-    query = "INSERT INTO arxiv (article, identifier, category) VALUES (?, ?, ?)"
-    cursor.execute(query, (article, identifier, category))
+    query = "UPDATE articles SET arxiv = ?, arxivcategory = ? WHERE id = ?"
+    cursor.execute(query, (identifier, category, article))
 
   except sqlite3.Error, e:
     print "An error occurred:", e.args[0]

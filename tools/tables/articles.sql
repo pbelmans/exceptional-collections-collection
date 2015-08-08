@@ -1,5 +1,8 @@
 CREATE TABLE "articles" (
   "id" INTEGER PRIMARY KEY,
   "title" VARCHAR,
-  "year" INTEGER
+  "year" INTEGER,
+  -- arXiv
+  "arxiv" INTEGER UNIQUE,
+  "arxivcategory" VARCHAR
 );

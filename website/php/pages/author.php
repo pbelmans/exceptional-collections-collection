@@ -13,9 +13,10 @@ class AuthorPage extends page {
   }
 
   public function getMain() {
-    $sql = $this->db->prepare("SELECT articles.id, articles.title, articles.year FROM articles, authorship WHERE authorship.article = articles.id AND authorship.author = :author");
-    $sql->bindParam(":author", $this->id);
+    global $articleFields;
 
+    $sql = $this->db->prepare("SELECT " . $articleFields . " FROM articles, authorship WHERE authorship.article = articles.id AND authorship.author = :author");
+    $sql->bindParam(":author", $this->id);
     $articles = getArticles($sql);
 
     return printTable($articles);
