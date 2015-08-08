@@ -2,3 +2,7 @@
   padding-top: 5px;
   padding-bottom: 5px;
 }
+
+div#authors {
+  margin: 1em 0 2em 0;
+}
