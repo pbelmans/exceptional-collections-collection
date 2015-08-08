@@ -13,7 +13,6 @@ function getKeywords($article) {
 
   if ($sql->execute()) {
     $rows = $sql->fetchAll();
-    print_r($rows);
 
     foreach ($rows as $row)
       array_push($keywords, new Keyword($row["id"], $row["keyword"], $row["slug"], $row["description"], $row["occurrences"]));
@@ -25,14 +24,48 @@ function getKeywords($article) {
 function printKeywords($keywords) {
   $output = "";
 
-  $output .= "<div class='panel panel-info'>";
+  $output .= "<div class='col-md-8'>";
+  $output .= "<div id='keywords' class='panel panel-default'>";
   $output .= "<div class='panel-heading'><h3 class='panel-title'>Keywords</h3></div>";
   $output .= "<div class='list-group'>";
 
   foreach ($keywords as $keyword)
-    $output .= "<a href='" . href("keyword/" . $keyword->slug) . "' class='list-group-item list-group-condensed'><span class='badge'>" . $keyword->occurrences . "</span>" . $keyword->keyword . "</a>";
+    $output .= "<a href='" . href("keywords/" . $keyword->slug) . "' class='list-group-item list-group-condensed'><span class='badge'>" . $keyword->occurrences . "</span>" . $keyword->keyword . "</a>";
 
-  $output .= "</ul>";
+  $output .= "</div>";
+  $output .= "</div>";
+  $output .= "</div>";
+
+  return $output;
+}
+
+function arXivLinkFull($arxiv) {
+  return "<a class='list-group-item' href='http://arxiv.org/abs/" . $arxiv["identifier"] . "'><img src='" . href("images/arxiv.ico") . "' height='16' alt='arXiv " . $arxiv["identifier"] . "'> arXiv:" . $arxiv["identifier"] . "</a>";
+}
+
+function MSCLinkFull($msc) {
+  return "<a class='list-group-item' href='http://www.ams.org/mathscinet-getitem?mr=" . $msc["identifier"] . "'><img src='" . href("images/msc.ico") . "' height='16' alt='MR" . $msc["identifier"] . "'> " . $msc["identifier"] . "</a>";
+}
+
+function zbMathLinkFull($zbmath) {
+  return "<a class='list-group-item' href='https://zbmath.org/?q=an:" . $zbmath["zbMath"] . "'><img src='" . href("images/zbmath.ico") . "' height='16' alt='Zbl" . $zbmath["zbMath"] . "'> " . $zbmath["identifier"] . "</a>";
+}
+
+function printLinksPanel($article) {
+  $output = "";
+
+  $output .= "<div class='col-md-4'>";
+  $output .= "<div id='links-list' class='panel panel-default'>";
+  $output .= "<div class='panel-heading'><h3 class='panel-title'>Links</h3></div>";
+  $output .= "<div class='list-group'>";
+  if (!empty($article->arXiv["identifier"]))
+    $output .= arXivLinkFull($article->arXiv);
+  if (!empty($article->MSC["identifier"]))
+    $output .= MSCLinkFull($article->MSC);
+  if (!empty($article->zbMath["identifier"]))
+    $output .= zbMathLinkFull($article->zbMath);
+  $output .= "</div>";
+  $output .= "</div>";
   $output .= "</div>";
 
   return $output;
@@ -58,8 +91,14 @@ class ArticlePage extends page {
 
     $output .= "<h2>" . $article->title . "</h2>";
 
+    $output .= "<div id='authors'>";
     $output .= printAuthors($article->authors);
+    $output .= "</div>";
+
+    $output .= "<div class='row'>";
+    $output .= printLinksPanel($article);
     $output .= printKeywords(getKeywords($article->id));
+    $output .= "</div>";
 
     return $output;
   }
