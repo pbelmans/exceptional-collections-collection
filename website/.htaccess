@@ -1,0 +1,7 @@
+Options +Indexes
+
+RewriteEngine On
+
+RewriteBase /~pbelmans/collection/
+
+RewriteRule authors/(.+)$ index.php?page=author&id=$1 [L]
