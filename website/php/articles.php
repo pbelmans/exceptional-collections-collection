@@ -88,7 +88,6 @@ function getArticles($sql) {
     $rows = $sql->fetchAll();
 
     foreach ($rows as $row) {
-      print_r($row);
       // create new article object
       $article = new Article($row["id"], $row["title"], $row["year"]);
       $article->arXiv = array("identifier" => $row["arxiv"], "category" => $row["arxivcategory"]);
