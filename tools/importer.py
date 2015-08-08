@@ -1,3 +1,4 @@
+import bibtexparser
 import feedparser
 import Levenshtein
 import requests
@@ -100,7 +101,7 @@ def addAuthorship(article, author):
   except sqlite3.Error, e:
     print "An error occurred:", e.args[0]
 
-# set the identifier and category for an article
+# set the arXiv identifier and category for an article
 def setArXivIdentifier(article, identifier, category):
   assert isValidIdentifier("arXiv", identifier)
   assert articleExists(article)
@@ -108,6 +109,18 @@ def setArXivIdentifier(article, identifier, category):
   try:
     query = "UPDATE articles SET arxiv = ?, arxivcategory = ? WHERE id = ?"
     cursor.execute(query, (identifier, category, article))
+
+  except sqlite3.Error, e:
+    print "An error occurred:", e.args[0]
+
+# set the MSC identifier for an article
+def setMSCIdentifier(article, identifier):
+  assert isValidIdentifier("MSC", identifier)
+  assert articleExists(article)
+
+  try:
+    query = "UPDATE articles SET msc = ? WHERE id = ?"
+    cursor.execute(query, (identifier, article))
 
   except sqlite3.Error, e:
     print "An error occurred:", e.args[0]
@@ -201,6 +214,24 @@ def addAuthor(first, last):
   return (True, author)
 
 """
+generic importer functionality, so the workflow is:
+  1) specific importer (e.g. arXivImporter) fetches data
+  2) creates article and authors object
+  3) tries adding the code, resolving collisions etc.
+  4) add extra importer-specific information (e.g. arXiv identifiers)
+"""
+
+def importer(title, authors):
+  # try adding the article
+  (added, article) = addArticle(title)
+
+  # if the article was added we try adding the authors to the database and linking the article to them
+  if added: addAuthors(article, authors)
+
+  return (added, article)
+
+
+"""
 importing from arXiv
 """
 
@@ -216,14 +247,13 @@ def arXivImporter(identifier):
 
   # collect the data from the feed
   title = entry["title"]
-  category = entry["tags"][0]["term"]
   authors = [author["name"].split(" ", 1) for author in entry["authors"]]
 
-  # try adding the article
-  (added, article) = addArticle(title)
+  # add the article and authors if necessary
+  (added, article) = importer(title, authors)
 
-  # if the article was added we try adding the authors to the database and linking the article to them
-  if added: addAuthors(article, authors)
+  # handle arXiv specific information
+  category = entry["tags"][0]["term"]
 
   # if the article was added we update the arXiv identifier accordingly
   if added:
@@ -234,6 +264,7 @@ def arXivImporter(identifier):
   # if the article already existed we only try updating the arXiv identifier
   else:
     # TODO check whether the article already has an arXiv id: if yes error, if no set it
+    setArXivIdentifier(article, identifier, category)
     print ""
 
   if verbose: print ""
@@ -306,15 +337,47 @@ def getBibTeXFromMSC(identifier):
 
   return code
 
-  
-#arXivImporter("1504.01776")
-#arXivImporter("1411.1799")
-#arXivImporter("1410.5207")
-#arXivImporter("1503.03992")
-#arXivImporter("math/0206295")
-#arXivImporter("alg-geom/9506012")
+def MRImporter(identifier):
+  bibtex = getBibTeXFromMSC(identifier)
 
-print getBibTeXFromMSC("MR1996800")
+  entry = bibtexparser.loads(bibtex).entries[0]
+
+  title = entry["title"]
+  authors = entry["author"]
+  authors = authors.split(" and ")
+  authors = [(name[1], name[0]) for name in [name.split(",") for name in authors]]
+  print authors
+  year = entry["year"]
+
+  # add the article and authors if necessary
+  (added, article) = importer(title, authors)
+
+  # if the article was added we update the MSC identifier accordingly
+  if added:
+    # associate MSC identifier and category to it
+    setMSCIdentifier(article, identifier)
+    if verbose: print "Associated MSC identifier {0} to article {1}".format(identifier, article)
+
+  # if the article already existed we only try updating the MSC identifier
+  else:
+    # TODO check whether the article already has an MSC id: if yes error, if no set it
+    setMSCIdentifier(article, identifier)
+    print ""
+
+  if verbose: print ""
+
+  if verbose: print ""
+
+
+  
+arXivImporter("1504.01776")
+arXivImporter("1411.1799")
+arXivImporter("1410.5207")
+arXivImporter("1503.03992")
+arXivImporter("math/0206295")
+arXivImporter("alg-geom/9506012")
+
+MRImporter("MR1996800")
 
 
 
