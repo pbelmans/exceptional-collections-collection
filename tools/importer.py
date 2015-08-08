@@ -1,6 +1,6 @@
 import feedparser
 import Levenshtein
-import pprint # TODO remove later on
+import requests
 import sqlite3
 
 import general
@@ -18,11 +18,11 @@ def isValidIdentifier(site, identifier):
   if   site == "arXiv":
     return True # TODO implement check
   elif site == "MSC":
-    return True # TODO implement check
+    return identifier[0:2] == "MR" and identifier[2:].isdigit()
   elif site == "zbMath":
     return True # TODO implement check
   else:
-    return True # TODO error
+    return False # TODO error
 
 def articleExists(article):
   # TODO implement this
@@ -200,6 +200,9 @@ def addAuthor(first, last):
 
   return (True, author)
 
+"""
+importing from arXiv
+"""
 
 def arXivImporter(identifier):
   assert isValidIdentifier("arXiv", identifier)
@@ -235,11 +238,85 @@ def arXivImporter(identifier):
 
   if verbose: print ""
 
+
+"""
+importing from Mathematical Reviews
+
+This code is modified from https://github.com/pbelmans/mscget
+"""
+
+# check whether we are authenticated by making an empty request
+def isAuthenticated():
+  # make the request
+  payload = {"fn": 130}
+  r = requests.get(path, params=payload)
+
+  if r.status_code == 200:
+    return True
+  elif r.status_code == 401:
+    return False
+  else:
+    raise Exception("Received HTTP status code " + str(r.status_code))
+
+class KeyNotFoundException(Exception):
+  def __init__(self, key):
+    self.key = key
+
+  def __str__(self):
+    return key + " was not found"
+
+class AuthenticationException(Exception):
+  def __str__(self):
+    return "Not authenticated"
+
+# path for the API
+path = "http://www.ams.org/msnmain"
+
+# obtain the BibTeX code for a Mathematical Review
+def getBibTeXFromMSC(identifier):
+  assert isValidIdentifier("MSC", identifier)
+
+  # reconstructing the BibTeX code block
+  inCodeBlock = False
+  code = ""
+
+  # make the request
+  payload = {"fn": 130, "fmt": "bibtex", "pg1": "MR", "s1": identifier}
+  r = requests.get(path, params=payload)
+
+  # 401 means not authenticated
+  if r.status_code == 401:
+    raise AuthenticationException()
+
+  # anything but 200 means something else went wrong
+  if not r.status_code == 200:
+    raise Exception("Received HTTP status code " + str(r.status_code))
+
+  for line in r.text.split("\n"):
+    if "No publications results for" in line:
+      raise KeyNotFoundException(identifier)
+
+
+    if line.strip() == "</pre>": inCodeBlock = False
+
+    if inCodeBlock:
+      code = code + "\n" + line
+
+    if line.strip() == "<pre>": inCodeBlock = True
+
+  return code
+
   
-arXivImporter("1504.01776")
-arXivImporter("1411.1799")
-arXivImporter("1410.5207")
-arXivImporter("1503.03992")
+#arXivImporter("1504.01776")
+#arXivImporter("1411.1799")
+#arXivImporter("1410.5207")
+#arXivImporter("1503.03992")
+#arXivImporter("math/0206295")
+#arXivImporter("alg-geom/9506012")
+
+print getBibTeXFromMSC("MR1996800")
+
+
 
 general.close(connection)
 
