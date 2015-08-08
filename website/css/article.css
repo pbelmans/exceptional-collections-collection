@@ -6,3 +6,8 @@
 div#authors {
   margin: 1em 0 2em 0;
 }
+
+div#links-list a {
+  font-size: .9em;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
