@@ -115,14 +115,18 @@ function printLinks($links) {
 function printTable($articles) {
   $output = "";
 
-  $output .= "<table>";
+  $output .= "<table class='table table-striped table-hover table-condensed'>";
+
+  $output .= "<thead>";
   $output .= "<tr>";
   $output .= "<th id='authors'>author(s)</th>";
   $output .= "<th id='title'>title</th>";
-  $output .= "<th id='links'>links</th>"; // TODO put favicons here
+  $output .= "<th id='links'>links</th>";
   $output .= "<th id='year'>year</th>";
   $output .= "</tr>";
+  $output .= "</thead>";
 
+  $output .= "<tbody>";
   foreach ($articles as $article) {
     $links = array("arXiv" => $article->arXiv["identifier"], "MSC" => $article->MSC["identifier"], "zbMath" => $article->zbMath["identifier"]);
 
@@ -133,6 +137,8 @@ function printTable($articles) {
     $output .= "<td>" . $article->year;
     $output .= "</tr>";
   }
+  $output .= "</tbody>";
+
   $output .= "</table>";
 
   return $output;

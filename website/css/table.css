@@ -11,15 +11,12 @@ table th#title {
 
 table th#links {
   width: 64px;
+  height: 0;
 }
 
 table td.links span {
-  display: block;
   width: 20px;
-  float: left;
-}
-
-table td.links img {
+  display: table-cell;
 }
 
 table th#year {
