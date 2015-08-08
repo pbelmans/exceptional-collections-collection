@@ -105,7 +105,7 @@ catch(PDOException $e) {
     <li><a href="<?php print href("contribute"); ?>">contribute</a>
   </ul>
 
-  <h1><a href="">the exceptional collection</a></h1>
+  <h1><a href="<?php print href(""); ?>">the exceptional collection</a></h1>
   <p>An overview of exceptional collections and semi-orthogonal decompositions in the literature
 </div>
 
