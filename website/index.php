@@ -102,6 +102,7 @@ catch(PDOException $e) {
 
 <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css" rel="stylesheet">
 <link href="<?php print href("css/main.css"); ?>" type="text/css" rel="stylesheet">
+<link href="<?php print href("css/article.css"); ?>" type="text/css" rel="stylesheet">
 <link href="<?php print href("css/table.css"); ?>" type="text/css" rel="stylesheet">
 
 </head>
