@@ -21,24 +21,6 @@ function getKeywordsForArticle($article) {
   return $keywords;
 }
 
-function printKeywords($keywords) {
-  $output = "";
-
-  $output .= "<div class='col-md-8'>";
-  $output .= "<div id='keywords' class='panel panel-default'>";
-  $output .= "<div class='panel-heading'><h3 class='panel-title'>Keywords</h3></div>";
-  $output .= "<div class='list-group'>";
-
-  foreach ($keywords as $keyword)
-    $output .= "<a href='" . href("keywords/" . $keyword->slug) . "' class='list-group-item list-group-condensed'><span class='badge'>" . $keyword->occurrences . "</span>" . $keyword->keyword . "</a>";
-
-  $output .= "</div>";
-  $output .= "</div>";
-  $output .= "</div>";
-
-  return $output;
-}
-
 function arXivLinkFull($arxiv) {
   return "<a class='list-group-item' href='http://arxiv.org/abs/" . $arxiv["identifier"] . "'><img src='" . href("images/arxiv.ico") . "' height='16' alt='arXiv " . $arxiv["identifier"] . "'> arXiv:" . $arxiv["identifier"] . "</a>";
 }
@@ -54,7 +36,6 @@ function zbMathLinkFull($zbmath) {
 function printLinksPanel($article) {
   $output = "";
 
-  $output .= "<div class='col-md-4'>";
   $output .= "<div id='links-list' class='panel panel-default'>";
   $output .= "<div class='panel-heading'><h3 class='panel-title'>Links</h3></div>";
   $output .= "<div class='list-group'>";
@@ -66,7 +47,6 @@ function printLinksPanel($article) {
     $output .= zbMathLinkFull($article->zbMath);
   if (!empty($article->arXiv["identifier"]) and !empty($article->MSC["identifier"]) and !empty($article->zbMath["identifier"]))
     $output .= "<li class='list-group-item'><em>No links known.</em>";
-  $output .= "</div>";
   $output .= "</div>";
   $output .= "</div>";
 
@@ -99,8 +79,12 @@ class ArticlePage extends page {
     $output .= "</div>";
 
     $output .= "<div class='row'>";
+    $output .= "<div class='col-md-4'>";
     $output .= printLinksPanel($article);
+    $output .= "</div>";
+    $output .= "<div class='col-md-8'>";
     $output .= printKeywords(getKeywordsForArticle($article->id));
+    $output .= "</div>";
     $output .= "</div>";
 
     return $output;

@@ -38,4 +38,38 @@ function getKeywordFromSlug($slug) {
   }
 }
 
+function getKeywords() {
+  global $database;
+
+  $keywords = array();
+
+  $sql = $database->prepare("SELECT keywords.id, keywords.keyword, keywords.slug, keywords.description, (SELECT COUNT(*) FROM articlekeywords WHERE articlekeywords.keyword = keywords.id) AS occurrences FROM keywords ORDER BY occurrences DESC");
+
+  if ($sql->execute()) {
+    $rows = $sql->fetchAll();
+
+    foreach ($rows as $row)
+      array_push($keywords, new Keyword($row["id"], $row["keyword"], $row["slug"], $row["description"], $row["occurrences"]));
+  }
+
+  return $keywords;
+}
+
+function printKeywords($keywords) {
+  $output = "";
+
+  $output .= "<div id='keywords' class='panel panel-default'>";
+  $output .= "<div class='panel-heading'><h3 class='panel-title'>Keywords</h3></div>";
+  $output .= "<div class='list-group'>";
+
+  foreach ($keywords as $keyword)
+    $output .= "<a href='" . href("keywords/" . $keyword->slug) . "' class='list-group-item list-group-condensed'><span class='badge'>" . $keyword->occurrences . "</span>" . $keyword->keyword . "</a>";
+
+  $output .= "</div>";
+  $output .= "</div>";
+
+  return $output;
+}
+
+
 ?>

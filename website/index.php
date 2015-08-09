@@ -12,6 +12,7 @@ require_once("php/pages/article.php");
 require_once("php/pages/author.php");
 require_once("php/pages/index.php");
 require_once("php/pages/keyword.php");
+require_once("php/pages/keywords.php");
 
 // we try to construct the page object
 try {
@@ -70,6 +71,10 @@ try {
       else
         $page = new ErrorPage("No keyword known for ..."); // TODO improve
 
+      break;
+
+    case "keywords":
+      $page = new KeywordsPage($database);
       break;
 
     // TODO etc. etc.
