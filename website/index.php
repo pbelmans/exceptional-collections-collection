@@ -127,8 +127,8 @@ $(document).ready(function() {
   <ul id="menu">
     <li><a href="<?php print href(""); ?>">home</a>
     <li><a href="<?php print href("authors"); ?>">authors</a>
+    <li><a href="<?php print href("keywords"); ?>">keywords</a>
     <li><a href="<?php print href("about"); ?>">about</a>
-    <li><a href="<?php print href("contribute"); ?>">contribute</a>
   </ul>
 
   <h1><a href="<?php print href(""); ?>">the exceptional collection</a></h1>
