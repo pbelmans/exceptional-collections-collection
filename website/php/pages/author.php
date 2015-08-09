@@ -23,7 +23,14 @@ class AuthorPage extends page {
 
     $sql = $this->db->prepare("SELECT " . $articleFields . " FROM articles, authorship WHERE authorship.article = articles.id AND authorship.author = :author");
     $sql->bindParam(":author", $this->id);
-    $output .= printTable(getArticles($sql));
+    $articles = getArticles($sql);
+
+    $output .= "<div class='panel panel-default'>";
+    $output .= "<div class='panel-heading'><h3 class='panel-title'>Articles by this author</h3></div>";
+    $output .= "<div class='panel-body'>"; // TODO make this collapsible (and collapsed by default?)
+    $output .= printTable($articles);
+    $output .= "</div>";
+    $output .= "</div>";
 
     // TODO overview of co-authors
 

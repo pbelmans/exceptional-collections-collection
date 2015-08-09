@@ -23,7 +23,7 @@ class KeywordPage extends page {
     $sql->bindParam(":keyword", $this->keyword->id);
     $articles = getArticles($sql);
 
-    $output .= "<div id='keywords' class='panel panel-default'>";
+    $output .= "<div class='panel panel-default'>";
     $output .= "<div class='panel-heading'><h3 class='panel-title'>Articles with this keyword</h3></div>";
     $output .= "<div class='panel-body'>"; // TODO make this collapsible (and collapsed by default?)
     $output .= printTable($articles);
