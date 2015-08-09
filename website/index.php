@@ -8,6 +8,7 @@ $config = parse_ini_file("../config.ini");
 require_once("php/general.php");
 
 # pages
+require_once("php/pages/about.php");
 require_once("php/pages/article.php");
 require_once("php/pages/author.php");
 require_once("php/pages/authors.php");
@@ -38,6 +39,10 @@ try {
   switch($type) {
     case "index":
       $page = new IndexPage($database);
+      break;
+
+    case "about":
+      $page = new AboutPage($database);
       break;
 
     case "article":
