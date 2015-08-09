@@ -47,7 +47,7 @@ function printAuthors($authors) {
   $output = "<ol class='authors'>";
 
   foreach ($authors as $author)
-    $output .= printAuthor($author);
+    $output .= "<li>" . printAuthor($author);
 
   $output .= "</ol>";
 
@@ -59,7 +59,7 @@ function printAuthor($author) {
   $output = "";
 
   // not sure whether this is the best format
-  $output .= "<li>" . $author->first . " <a href='" . href("authors/" . $author->id) . "'>" . $author->last . "</a>";
+  $output .= $author->first . " <a href='" . href("authors/" . $author->id) . "'>" . $author->last . "</a>";
 
   return $output;
 }

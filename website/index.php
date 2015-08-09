@@ -10,6 +10,7 @@ require_once("php/general.php");
 # pages
 require_once("php/pages/article.php");
 require_once("php/pages/author.php");
+require_once("php/pages/authors.php");
 require_once("php/pages/index.php");
 require_once("php/pages/keyword.php");
 require_once("php/pages/keywords.php");
@@ -39,7 +40,7 @@ try {
       $page = new IndexPage($database);
       break;
 
-    case "articles":
+    case "article":
       if (empty($_GET["id"])) {
         $page = new ErrorPage("No article id supplied"); // TODO improve: maybe just display all articles sorted by id?
         break;
@@ -61,6 +62,10 @@ try {
       // TODO check existence
 
       $page = new AuthorPage($database, $_GET["id"]);
+      break;
+
+    case "authors":
+      $page = new AuthorsPage($database);
       break;
 
     case "keyword":
@@ -126,6 +131,10 @@ catch(PDOException $e) {
 <script type="text/javascript">
 $(document).ready(function() {
   $("table#articles").DataTable( {
+    "columnDefs" : [ { "orderable": false, "targets" : 2 } ]
+  });
+
+  $("table#authors").DataTable( {
     "columnDefs" : [ { "orderable": false, "targets" : 2 } ]
   });
 });

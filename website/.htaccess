@@ -4,7 +4,8 @@ RewriteEngine On
 
 RewriteBase /~pbelmans/collection/
 
-RewriteRule articles/(.+)$ index.php?page=articles&id=$1 [L]
+RewriteRule articles/(.+)$ index.php?page=article&id=$1 [L]
+RewriteRule authors$ index.php?page=authors [L]
 RewriteRule authors/(.+)$ index.php?page=author&id=$1 [L]
 RewriteRule keywords$ index.php?page=keywords [L]
 RewriteRule keywords/(.+)$ index.php?page=keyword&slug=$1 [L]

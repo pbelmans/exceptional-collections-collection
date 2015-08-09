@@ -31,6 +31,7 @@ class AuthorPage extends page {
     $output .= printTable($articles);
     $output .= "</div>";
     $output .= "</div>";
+    $output .= "</div>";
 
     // TODO overview of co-authors
 
