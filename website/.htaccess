@@ -6,3 +6,4 @@ RewriteBase /~pbelmans/collection/
 
 RewriteRule articles/(.+)$ index.php?page=articles&id=$1 [L]
 RewriteRule authors/(.+)$ index.php?page=author&id=$1 [L]
+RewriteRule keywords/(.+)$ index.php?page=keyword&slug=$1 [L]

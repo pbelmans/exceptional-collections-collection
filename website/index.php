@@ -7,9 +7,11 @@ $config = parse_ini_file("../config.ini");
 
 require_once("php/general.php");
 
+# pages
 require_once("php/pages/article.php");
 require_once("php/pages/author.php");
 require_once("php/pages/index.php");
+require_once("php/pages/keyword.php");
 
 // we try to construct the page object
 try {
@@ -43,6 +45,7 @@ try {
       }
 
       // TODO check existence
+      // TODO do the database handling here, not inside the ArticlePage class
 
       $page = new ArticlePage($database, $_GET["id"]);
       break;
@@ -53,9 +56,20 @@ try {
         break;
       }
 
+      // TODO do the database handling here, not inside the AuthorPage class
       // TODO check existence
 
       $page = new AuthorPage($database, $_GET["id"]);
+      break;
+
+    case "keyword":
+      if (keywordExists($_GET["slug"])) {
+        $keyword = getKeywordFromSlug($_GET["slug"]);
+        $page = new KeywordPage($database, $keyword);
+      }
+      else
+        $page = new ErrorPage("No keyword known for ..."); // TODO improve
+
       break;
 
     // TODO etc. etc.

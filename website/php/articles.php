@@ -23,26 +23,6 @@ class Article {
   }
 }
 
-/**
- * Data container for keywords
- */
-class Keyword {
-  public $id;
-
-  public $keyword;
-  public $slug;
-  public $description;
-  public $occurrences;
-
-  public function __construct($id, $keyword, $slug, $description, $occurrences) {
-    $this->id = $id;
-    $this->keyword = $keyword;
-    $this->slug = $slug;
-    $this->description = $description;
-    $this->occurrences = $occurrences;
-  }
-}
-
 // describes all the fields that one needs to select
 $articleFields = "articles.id, articles.title, articles.year, articles.arxiv, articles.arxivcategory, articles.msc";
 

@@ -3,7 +3,7 @@
 require_once("php/page.php");
 require_once("php/articles.php");
 
-function getKeywords($article) {
+function getKeywordsForArticle($article) {
   global $database;
 
   $keywords = array();
@@ -100,7 +100,7 @@ class ArticlePage extends page {
 
     $output .= "<div class='row'>";
     $output .= printLinksPanel($article);
-    $output .= printKeywords(getKeywords($article->id));
+    $output .= printKeywords(getKeywordsForArticle($article->id));
     $output .= "</div>";
 
     return $output;
