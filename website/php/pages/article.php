@@ -87,7 +87,8 @@ class ArticlePage extends page {
 
     $sql = $this->db->prepare("SELECT " . $articleFields . " FROM articles WHERE articles.id = :article");
     $sql->bindParam(":article", $this->id);
-    $article = getArticles($sql)[0];
+    $articles = getArticles($sql);
+    $article = $articles[0];
 
     $output = "";
 
