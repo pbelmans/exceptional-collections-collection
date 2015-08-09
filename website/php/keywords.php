@@ -85,12 +85,8 @@ function getRelatedKeywords($id) {
 function printKeywords($keywords) {
   $output = "";
 
-  $output .= "<div class='list-group'>";
-
   foreach ($keywords as $keyword)
     $output .= "<a href='" . href("keywords/" . $keyword->slug) . "' class='list-group-item list-group-condensed'><span class='badge'>" . $keyword->occurrences . "</span>" . $keyword->keyword . "</a>";
-
-  $output .= "</div>";
 
   return $output;
 }

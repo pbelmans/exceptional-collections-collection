@@ -79,6 +79,7 @@ class ArticlePage extends page {
     $output .= "</div>";
 
     $output .= "<div class='row'>";
+
     $output .= "<div class='col-md-4'>";
     // TODO move divs out of printLinksPanel
     $output .= printLinksPanel($article);
@@ -87,10 +88,21 @@ class ArticlePage extends page {
     $output .= "<div class='col-md-8'>";
     $output .= "<div id='keywords' class='panel panel-default'>";
     $output .= "<div class='panel-heading'><h3 class='panel-title'>Keywords</h3></div>";
-    $output .= printKeywords(getKeywordsForArticle($article->id));
+    $keywords = getKeywordsForArticle($article->id);
+    if (count($keywords) == 0) {
+      $output .= "<div class='panel-body'>";
+      $output .= "<em>No keywords associated to this article.</em>";
+      $output .= "</div>";
+    }
+    else {
+      $output .= "<div class='list-group'>";
+      $output .= printKeywords($articles);
+      $output .= "</div>";
+    }
     $output .= "</div>";
     $output .= "</div>";
     $output .= "</div>";
+
     $output .= "</div>";
 
     return $output;
