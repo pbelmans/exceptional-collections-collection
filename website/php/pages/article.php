@@ -80,10 +80,16 @@ class ArticlePage extends page {
 
     $output .= "<div class='row'>";
     $output .= "<div class='col-md-4'>";
+    // TODO move divs out of printLinksPanel
     $output .= printLinksPanel($article);
     $output .= "</div>";
+
     $output .= "<div class='col-md-8'>";
+    $output .= "<div id='keywords' class='panel panel-default'>";
+    $output .= "<div class='panel-heading'><h3 class='panel-title'>Keywords</h3></div>";
     $output .= printKeywords(getKeywordsForArticle($article->id));
+    $output .= "</div>";
+    $output .= "</div>";
     $output .= "</div>";
     $output .= "</div>";
 
