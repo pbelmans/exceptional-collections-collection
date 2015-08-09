@@ -3,7 +3,7 @@ CREATE TABLE "articles" (
   "title" VARCHAR,
   "year" INTEGER,
   -- arXiv
-  "arxiv" INTEGER UNIQUE,
+  "arxiv" VARCHAR UNIQUE,
   "arxivcategory" VARCHAR,
   -- msc
   "msc" VARCHAR UNIQUE
