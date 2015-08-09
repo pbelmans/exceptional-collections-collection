@@ -1,20 +1,6 @@
 <?php
 
-/**
- * Data container class for authors in articles
- */
-class Author {
-  public $id;
-
-  public $first;
-  public $last;
-
-  public function __construct($id, $first, $last) {
-    $this->id = $id;
-    $this->first = $first;
-    $this->last = $last;
-  }
-}
+require_once("authors.php");
 
 /**
  * Data container class for articles

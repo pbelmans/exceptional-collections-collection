@@ -1,6 +1,7 @@
 <?php
 
 require_once("php/page.php");
+require_once("php/authors.php");
 require_once("php/table.php");
 
 
@@ -13,13 +14,20 @@ class AuthorPage extends page {
   }
 
   public function getMain() {
+    $output = "";
+
+    $author = getAuthor($this->id);
+    $output .= "<h2>" . $author->first . " " . $author->last . "</h2>";
+
     global $articleFields;
 
     $sql = $this->db->prepare("SELECT " . $articleFields . " FROM articles, authorship WHERE authorship.article = articles.id AND authorship.author = :author");
     $sql->bindParam(":author", $this->id);
-    $articles = getArticles($sql);
+    $output .= printTable(getArticles($sql));
 
-    return printTable($articles);
+    // TODO overview of co-authors
+
+    return $output;
   }
 
   public function getTitle() {
