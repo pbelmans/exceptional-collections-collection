@@ -61,7 +61,15 @@ function getRelatedKeywords($id) {
 
   $keywords = array();
 
-  $sql = $database->prepare("SELECT DISTINCT keywords.id, keywords.keyword, keywords.slug, keywords.description, (SELECT COUNT(*) FROM articlekeywords WHERE articlekeywords.keyword = keywords.id) AS occurrences FROM keywords, articlekeywords WHERE articlekeywords.article IN (SELECT articlekeywords.article FROM articlekeywords WHERE articlekeywords.keyword = :id) AND NOT articlekeywords.keyword = :id ORDER BY occurrences DESC");
+  $sql = $database->prepare("
+    SELECT keywords.id, keywords.keyword, keywords.slug, keywords.description, COUNT(keywords.id) AS occurrences
+    FROM keywords, articlekeywords
+    WHERE
+      articlekeywords.article IN (SELECT articlekeywords.article FROM articlekeywords WHERE articlekeywords.keyword = :id)
+    	AND keywords.id = articlekeywords.keyword
+    	AND NOT articlekeywords.keyword = :id
+    GROUP BY keywords.id
+    ORDER BY occurrences DESC");
   $sql->bindParam(":id", $id);
 
   if ($sql->execute()) {
