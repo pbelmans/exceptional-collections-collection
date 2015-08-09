@@ -106,7 +106,9 @@ catch(PDOException $e) {
 
 <script type="text/javascript">
 $(document).ready(function() {
-  $("table#articles").DataTable();
+  $("table#articles").DataTable( {
+    "columnDefs" : [ { "orderable": false, "targets" : 2 } ]
+  });
 });
 </script>
 
