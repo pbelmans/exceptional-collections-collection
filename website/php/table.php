@@ -6,7 +6,7 @@ require_once("articles.php");
 function printTable($articles) {
   $output = "";
 
-  $output .= "<table class='table table-striped table-hover table-condensed'>";
+  $output .= "<table id='articles' class='table table-striped table-hover table-condensed'>";
 
   $output .= "<thead>";
   $output .= "<tr>";
@@ -20,7 +20,7 @@ function printTable($articles) {
   $output .= "<tbody>";
   foreach ($articles as $article) {
     $output .= "<tr>";
-    $output .= "<td>" . printAuthors($article->authors);
+    $output .= "<td data-order='" . $article->authors[0]->last . "'>" . printAuthors($article->authors);
     $output .= "<td>" . printArticle($article);
     $output .= "<td class='links'>" . printLinks($article);
     $output .= "<td>" . printYear($article);

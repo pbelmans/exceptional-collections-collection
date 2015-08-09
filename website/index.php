@@ -100,7 +100,18 @@ catch(PDOException $e) {
 </script>
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 
-<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $("table#articles").DataTable();
+});
+</script>
+
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+<link href="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css" type="text/css" rel="stylesheet">
 <link href="<?php print href("css/main.css"); ?>" type="text/css" rel="stylesheet">
 <link href="<?php print href("css/article.css"); ?>" type="text/css" rel="stylesheet">
 <link href="<?php print href("css/table.css"); ?>" type="text/css" rel="stylesheet">
