@@ -213,17 +213,20 @@ def addAuthor(first, last):
   # if there are collisions we ask the user whether the author already exists
   if len(similar) > 0:
     # give them the options
-    print "Found authors similar to {0} {1}:".format(first, last)
+    print unicode("Found authors similar to {0} {1}:").format(first, last)
     for (author, first, last) in similar:
-      print " {0}) {1} {2}".format(author, first, last)
+      print unicode(" {0}) {1} {2}").format(author, first, last)
 
     # try to resolve the collision
     while True:
-      answer = raw_input(unicode("Is the author '{0} {1}' any of the above? (Y/N): ").format(first, last))
+      # TODO because of encoding issues I cannot print the author name here for some reason...
+      answer = raw_input(unicode("Is the author any of the above? (Y/N): "))
 
       # if yes then we ask for the collision
       if answer == "Y":
         if verbose: print unicode("Not adding '{0} {1}'\n").format(first, last)
+
+        # TODO if there is only 1 choice: default
 
         # for later use we return the id of the already existing author
         while True:
