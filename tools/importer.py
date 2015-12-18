@@ -382,19 +382,6 @@ def MRImporter(identifier):
   if verbose: print ""
 
 
-  
-arXivImporter("1504.01776")
-arXivImporter("1411.1799")
-arXivImporter("1410.5207")
-arXivImporter("1503.03992")
-arXivImporter("math/0206295")
-arXivImporter("alg-geom/9506012")
-
-MRImporter("MR1996800")
-arXivImporter("math/0204218")
-
-
-
 general.close(connection)
 
 """
