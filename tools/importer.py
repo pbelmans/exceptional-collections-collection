@@ -25,6 +25,25 @@ def isValidIdentifier(site, identifier):
   else:
     return False # TODO error
 
+
+def identifierExists(site, identifier):
+  assert isValidIdentifier(site, identifier)
+
+  if site == "arXiv":
+    query = "SELECT COUNT(*) FROM articles WHERE arxiv = ?"
+  elif site == "MSC":
+    query = "SELECT COUNT(*) FROM articles WHERE msc = ?"
+  elif site == "zbMath":
+    return False # TODO build query
+  else:
+    return False # TODO error
+
+  cursor.execute(query, (identifier,))
+  count = cursor.fetchone()
+
+  return count[0] == 1
+
+
 def articleExists(article):
   # TODO implement this
   return True
@@ -381,8 +400,6 @@ def MRImporter(identifier):
 
   if verbose: print ""
 
-
-general.close(connection)
 
 """
 WORKFLOW
